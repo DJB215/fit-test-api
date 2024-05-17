@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, make_response
-from flask_sqlalchemy import create_engine, SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
+## from sqlalchemy import create_engine
 from dotenv import load_dotenv
 import os
 import urllib
@@ -15,8 +16,8 @@ password = os.getenv('PWD')
 
 driver = '{ODBC Driver 17 for SQL Server}'
 
-odbc_str = 'DRIVER='+driver+';SERVER='+server+'PORT=1433;UID='+username+';DATABASE='+database+';PWD='+password
-connect_str = 'mssql+pyodbc:///?odbc_connect=' + urllib.quote_plus(odbc_str)
+odbc_str = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=use-clin-sqlmi-test.3351287e77c0.database.windows.net;PORT=1433;UID=jeffadmin;DATABASE='+database+';PWD='+password
+connect_str = 'mssql+pyodbc:///?odbc_connect=' + odbc_str
 
 app.config['SQLALCHEMY_DATABASE_URI'] = connect_str
 
@@ -36,7 +37,7 @@ def home():
   return 'Hello to Fit Test'
 
 @app.route('/users', methods=['GET'])
-def get_users():
+def get_users(e):
   try:
     users = Users.query.all()
     return make_response(jsonify([user.json() for user in users]), 200)
